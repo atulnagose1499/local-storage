@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <table id="contacts">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Message</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Contacts will be added here -->
+      </tbody>
+    </table>
+
+    <script>
+      // Check if contacts exist in local storage
+      if (localStorage.getItem("contacts") !== null) {
+        // If yes, get contacts
+        let contacts = JSON.parse(localStorage.getItem("contacts"));
+
+        // Loop through contacts and add to table
+        contacts.forEach(function (contact, index) {
+          let row = document.createElement("tr");
+
+          row.innerHTML = `
+          <td>${contact.name}</td>
+          <td>${contact.email}</td>
+          <td>${contact.message}</td>
+          <td><button class="delete-btn" data-index="${index}">Delete</button></td>
+        `;
+
+          document.getElementById("contacts").children[1].appendChild(row);
+        });
+      }
+
+      // Add event listener to delete buttons
+      let deleteBtns = document.getElementsByClassName("delete-btn");
+      for (let i = 0; i < deleteBtns.length; i++) {
+        deleteBtns[i].addEventListener("click", deleteData);
+      }
+
+      function deleteData(e) {
+        // Get index of contact to delete
+        let index = e.target.dataset.index;
+
+        // Get contacts from local storage
+        let contacts = JSON.parse(localStorage.getItem("contacts"));
+
+        // Remove contact from array
+        contacts.splice(index, 1);
+
+        // Update local storage
+        localStorage.setItem("contacts", JSON.stringify(contacts));
+
+        // Reload page to update table
+        location.reload();
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form id="contact-form">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" />
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" />
+
+      <label for="message">Message:</label>
+      <textarea id="message" name="message"></textarea>
+
+      <input type="submit" value="Submit" />
+    </form>
+
+    <script>
+      // Add event listener to form
+      document
+        .getElementById("contact-form")
+        .addEventListener("submit", saveData);
+
+      function saveData(e) {
+        // Prevent form from submitting
+        e.preventDefault();
+
+        // Get form data
+        let name = document.getElementById("name").value;
+        let email = document.getElementById("email").value;
+        let message = document.getElementById("message").value;
+
+        // Create contact object
+        let contact = {
+          name: name,
+          email: email,
+          message: message,
+        };
+
+        // Check if contacts exist in local storage
+        if (localStorage.getItem("contacts") === null) {
+          // If not, create a new array and add contact
+          let contacts = [];
+          contacts.push(contact);
+          localStorage.setItem("contacts", JSON.stringify(contacts));
+        } else {
+          // If yes, get contacts and add new contact
+          let contacts = JSON.parse(localStorage.getItem("contacts"));
+          contacts.push(contact);
+          localStorage.setItem("contacts", JSON.stringify(contacts));
+        }
+        // Clear input fields
+        document.getElementById("name").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("message").value = "";
+      }
+    </script>
+  </body>
+</html>
