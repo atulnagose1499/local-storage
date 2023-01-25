@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #images {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      #images div {
+        width: 200px;
+        margin: 10px;
+        position: relative;
+      }
+
+      #images img {
+        max-width: 100%;
+      }
+
+      #images button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-color: red;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="images">
+      <!-- Images will be added here -->
+    </div>
+    <button><a href="./index.html">index</a></button>
+
+    <script>
+      // Check if images exist in local storage
+      if (localStorage.getItem("images") !== null) {
+        // If yes, get images
+        let images = JSON.parse(localStorage.getItem("images"));
+
+        // Loop through images and add to container
+        images.forEach(function (image, index) {
+          let img = document.createElement("img");
+          img.src = image;
+          img.setAttribute("data-index", index);
+
+          let btn = document.createElement("button");
+          btn.innerHTML = "Delete";
+          btn.classList.add("delete-btn");
+          btn.setAttribute("data-index", index);
+          btn.addEventListener("click", deleteImage);
+
+          let container = document.createElement("div");
+          container.appendChild(img);
+          container.appendChild(btn);
+
+          document.getElementById("images").appendChild(container);
+        });
+      }
+
+      function deleteImage(e) {
+        let index = e.target.dataset.index;
+
+        let images = JSON.parse(localStorage.getItem("images"));
+        images.splice(index, 1);
+        localStorage.setItem("images", JSON.stringify(images));
+
+        location.reload();
+      }
+    </script>
+  </body>
+</html>

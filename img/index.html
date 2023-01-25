@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form id="image-form">
+      <input type="file" id="image" name="image" />
+      <input type="submit" value="Upload" />
+    </form>
+
+    <button><a href="./admin.html">admin</a></button>
+
+    <script>
+      // Add event listener to form
+      document
+        .getElementById("image-form")
+        .addEventListener("submit", saveImage);
+
+      function saveImage(e) {
+        // Prevent form from submitting
+        e.preventDefault();
+
+        // Get image file
+        let image = document.getElementById("image").files[0];
+        let reader = new FileReader();
+        reader.onloadend = function () {
+          let imageData = reader.result;
+          // Check if images exist in local storage
+          if (localStorage.getItem("images") === null) {
+            // If not, create a new array and add image
+            let images = [];
+            images.push(imageData);
+            localStorage.setItem("images", JSON.stringify(images));
+          } else {
+            // If yes, get images and add new image
+            let images = JSON.parse(localStorage.getItem("images"));
+            images.push(imageData);
+            localStorage.setItem("images", JSON.stringify(images));
+          }
+        };
+        reader.readAsDataURL(image);
+      }
+    </script>
+  </body>
+</html>
